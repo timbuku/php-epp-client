@@ -35,6 +35,8 @@ class euridEppContact extends eppContact {
     private $contactExtLang = 'en';
     private $contactExtVat  = null;
     private $countryOfCitizenship = null;
+    private $naturalPerson = null;
+    private $whoisEmail = null;
 
     public function __construct($postalInfo = null, $email = null, $voice = null, $fax = null, $password = null, $status = null) {
         parent::__construct($postalInfo, $email, $voice, $fax, $password, $status );
@@ -88,5 +90,25 @@ class euridEppContact extends eppContact {
 
     public function getContactExtCountryOfCitizenship() {
         return $this->countryOfCitizenship;
+    }
+
+    public function setContactExtNaturalPerson($naturalPerson)
+    {
+        $this->naturalPerson = $naturalPerson;
+    }
+
+    public function getContactExtNaturalPerson()
+    {
+        return $this->naturalPerson;
+    }
+
+    public function setContactExtWhoisEmail($email)
+    {
+        $this->whoisEmail = $email;
+    }
+
+    public function getContactExtWhoisEmail()
+    {
+        return $this->whoisEmail;
     }
 }
