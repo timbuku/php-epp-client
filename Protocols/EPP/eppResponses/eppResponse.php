@@ -113,8 +113,33 @@ class eppResponse extends \DOMDocument {
         return str_replace("\t", '  ', parent::saveXML($node, LIBXML_NOEMPTYTAG));
     }
 
+    public function formatContents() {
+        $result = '';
+        $spacing = 2;
+        $text = $this->saveXML();
+        $text = str_replace("\n",'',$text);
+        $text = str_replace('><',">\n<",$text);
+        $text = str_replace(' <'," \n<",$text);
+        $output = explode("\n",$text);
+        $spaces = 0;
+        foreach ($output as $line) {
+            if (strpos($line,'</')===0) {
+                $spaces -= $spacing;
+            }
+            $result .= substr('                          ',0,$spaces).$line."\n";
+            $spaces += $spacing;
+            if (strpos($line,'?>')!==false) {
+                $spaces -= $spacing;
+            }
+            if (strpos($line,'</')!==false) {
+                $spaces -= $spacing;
+            }
+        }
+        return $result;
+    }
+
     public function dumpContents() {
-        echo $this->saveXML();
+        echo $this->formatContents();
     }
 
     /**

@@ -363,9 +363,9 @@ class eppConnection {
             if ($errno == 0) {
                 $meta = stream_get_meta_data($this->connection);
                 if (isset($meta['crypto'])) {
-                    $this->writeLog("Stream opened with protocol ".$meta['crypto']['protocol'].", cipher ".$meta['crypto']['cipher_name'].", ".$meta['crypto']['cipher_bits']." bits ".$meta['crypto']['cipher_version'],"Connection made");
+                    $this->writeLog("Stream opened to ".$this->getHostname()." port ".$this->getPort()." with protocol ".$meta['crypto']['protocol'].", cipher ".$meta['crypto']['cipher_name'].", ".$meta['crypto']['cipher_bits']." bits ".$meta['crypto']['cipher_version'],"Connection made");
                 } else {
-                    $this->writeLog("Stream opened","Connection made");
+                    $this->writeLog("Stream opened to ".$this->getHostname()." port ".$this->getPort(),"Connection made");
                 }
                 $this->connected = true;
                 $this->read();
@@ -826,6 +826,7 @@ class eppConnection {
         if (!$response) {
             throw new eppException("No valid response from server",0,null,null,$content);
         }
+        $content->preserveWhiteSpace = false;
         $content->formatOutput = true;
         $this->writeLog($content->saveXML(null, LIBXML_NOEMPTYTAG),"WRITE");
 
@@ -845,7 +846,9 @@ class eppConnection {
                 set_error_handler(array($this,'HandleXmlError'));
                 if ($response->loadXML($xml)) {
                     restore_error_handler();
-                    $this->writeLog($response->saveXML(null, LIBXML_NOEMPTYTAG), "READ");
+                    $response->preserveWhiteSpace = false;
+                    $response->formatOutput = true;
+                    $this->writeLog($response->formatContents(), "READ");
                     $clienttransid = $response->getClientTransactionId();
                     if (($this->checktransactionids) && ($clienttransid) && ($clienttransid != $requestsessionid) && ($clienttransid!='{{clTRID}}')) {
                         throw new eppException("Client transaction id $requestsessionid does not match returned $clienttransid",0,null,null,$xml);
@@ -862,7 +865,6 @@ class eppConnection {
                     restore_error_handler();
                 }
             } else {
-
                 throw new eppException('Empty XML document when receiving data!');
             }
         } else {
