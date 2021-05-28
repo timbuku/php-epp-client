@@ -24,16 +24,19 @@ class euridEppContact extends eppContact {
     # The type of contact to create. Can be one of: “registrant”, “onsite”, "reseller", “tech”.
     #
 
-    const CONTACT_EXT_TYPES = ['registrant', 'tech', 'onsite', 'reseller'];
+    const CONTACT_EXT_TYPES = ['registrant', 'tech', 'onsite', 'reseller', 'billing'];
     const EURID_EXT_CONTACT_REGISTRANT = 'registrant';
     const EURID_EXT_CONTACT_TECH = 'tech';
     const EURID_EXT_CONTACT_ONSITE = 'onsite';
     const EURID_EXT_CONTACT_RESELLER = 'reseller';
+    const EURID_EXT_CONTACT_BILLING = 'billing';
 
     private $contactExtType;
     private $contactExtLang = 'en';
     private $contactExtVat  = null;
     private $countryOfCitizenship = null;
+    private $naturalPerson = null;
+    private $whoisEmail = null;
 
     public function __construct($postalInfo = null, $email = null, $voice = null, $fax = null, $password = null, $status = null) {
         parent::__construct($postalInfo, $email, $voice, $fax, $password, $status );
@@ -87,5 +90,25 @@ class euridEppContact extends eppContact {
 
     public function getContactExtCountryOfCitizenship() {
         return $this->countryOfCitizenship;
+    }
+
+    public function setContactExtNaturalPerson($naturalPerson)
+    {
+        $this->naturalPerson = $naturalPerson;
+    }
+
+    public function getContactExtNaturalPerson()
+    {
+        return $this->naturalPerson;
+    }
+
+    public function setContactExtWhoisEmail($email)
+    {
+        $this->whoisEmail = $email;
+    }
+
+    public function getContactExtWhoisEmail()
+    {
+        return $this->whoisEmail;
     }
 }
