@@ -75,7 +75,7 @@ class eppContact {
         $this->setVoice($voice);
         $this->setFax($fax);
         $this->setStatus($status);
-        $this->setPassword(self::generateRandomString(10));
+
     }
 
     public function setDisclose($disclose) {
@@ -239,7 +239,7 @@ class eppContact {
         if (!strlen($number)) {
             return null;
         }
-        if ($number{0} != '+') {
+        if ($number[0] != '+') {
             throw new eppException('Phone number ' . $number . ' is not valid for EPP. Valid format is +cc.nnnnnnnnnnn');
         }
         if (strpos($number, '.') === false) {
@@ -274,13 +274,5 @@ class eppContact {
         return uniqid('MRG');
     }
 
-    public static function generateRandomString($length = 10) {
-        $characters = '123456789ABCDEFGHIJKLMNPQRSTUVWXYZ';
-        $charactersLength = strlen($characters);
-        $randomString = '';
-        for ($i = 0; $i < $length; $i++) {
-            $randomString .= $characters[rand(0, $charactersLength - 1)];
-        }
-        return $randomString;
-    }
+
 }
